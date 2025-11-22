@@ -1,9 +1,32 @@
 import Foundation
 import GrinshCore
 
+#if canImport(Darwin)
+import Darwin
+#endif
+
+// Command history
+var commandHistory: [String] = []
+var historyIndex: Int = 0
+
+// Terminal settings
+var originalTermios: termios = termios()
+
 // Signal handling
 var shouldExit = false
 var currentAgent: Agent?
+
+// Terminal raw mode functions
+func enableRawMode() {
+    tcgetattr(STDIN_FILENO, &originalTermios)
+    var raw = originalTermios
+    raw.c_lflag &= ~(UInt(ECHO | ICANON))
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw)
+}
+
+func disableRawMode() {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &originalTermios)
+}
 
 func setupSignalHandlers() {
     signal(SIGINT) { _ in
@@ -20,8 +43,79 @@ func setupSignalHandlers() {
     }
 
     signal(SIGTERM) { _ in
+        disableRawMode()
         shouldExit = true
     }
+}
+
+// Read line with history support
+func readLineWithHistory() -> String? {
+    enableRawMode()
+    defer { disableRawMode() }
+
+    var currentLine = ""
+    var cursorPos = 0
+    historyIndex = commandHistory.count
+
+    while true {
+        guard let char = getChar() else { continue }
+
+        // Handle special keys
+        if char == 127 || char == 8 {  // Backspace or Delete
+            if cursorPos > 0 {
+                currentLine.remove(at: currentLine.index(currentLine.startIndex, offsetBy: cursorPos - 1))
+                cursorPos -= 1
+                redrawLine(currentLine, cursorPos: cursorPos)
+            }
+        } else if char == 27 {  // ESC - arrow keys
+            let next1 = getChar()
+            let next2 = getChar()
+
+            if next1 == 91 {  // '[' - ANSI escape sequence
+                if next2 == 65 {  // Up arrow
+                    if historyIndex > 0 {
+                        historyIndex -= 1
+                        currentLine = commandHistory[historyIndex]
+                        cursorPos = currentLine.count
+                        redrawLine(currentLine, cursorPos: cursorPos)
+                    }
+                } else if next2 == 66 {  // Down arrow
+                    if historyIndex < commandHistory.count - 1 {
+                        historyIndex += 1
+                        currentLine = commandHistory[historyIndex]
+                        cursorPos = currentLine.count
+                        redrawLine(currentLine, cursorPos: cursorPos)
+                    } else if historyIndex == commandHistory.count - 1 {
+                        historyIndex = commandHistory.count
+                        currentLine = ""
+                        cursorPos = 0
+                        redrawLine(currentLine, cursorPos: cursorPos)
+                    }
+                }
+            }
+        } else if char == 13 || char == 10 {  // Enter/Return
+            print("")
+            return currentLine
+        } else if char >= 32 && char < 127 {  // Printable characters
+            let character = Character(UnicodeScalar(char))
+            currentLine.insert(character, at: currentLine.index(currentLine.startIndex, offsetBy: cursorPos))
+            cursorPos += 1
+            print(character, terminator: "")
+            fflush(stdout)
+        }
+    }
+}
+
+func getChar() -> UInt8? {
+    var c: UInt8 = 0
+    let result = read(STDIN_FILENO, &c, 1)
+    return result == 1 ? c : nil
+}
+
+func redrawLine(_ line: String, cursorPos: Int) {
+    // Clear line
+    print("\r\u{001B}[K\(Color.blue)>\(Color.reset) \(line)", terminator: "")
+    fflush(stdout)
 }
 
 // Main REPL loop
@@ -38,8 +132,8 @@ func runREPL(agent: Agent) {
         print("\(Color.blue)>\(Color.reset) ", terminator: "")
         fflush(stdout)
 
-        // Read input
-        guard let input = readLine()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+        // Read input with history support
+        guard let input = readLineWithHistory()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             continue
         }
 
@@ -48,10 +142,16 @@ func runREPL(agent: Agent) {
             continue
         }
 
+        // Add to history
+        if !input.isEmpty && (commandHistory.isEmpty || commandHistory.last != input) {
+            commandHistory.append(input)
+        }
+
         // Handle special commands
         switch input.lowercased() {
         case "exit", "quit":
             print("\(Color.green)Goodbye!\(Color.reset)")
+            disableRawMode()
             return
 
         case "clear":
