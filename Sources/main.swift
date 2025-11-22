@@ -1,4 +1,5 @@
 import Foundation
+import GrinshCore
 
 // Signal handling
 var shouldExit = false

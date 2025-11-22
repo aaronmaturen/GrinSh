@@ -1,9 +1,9 @@
 import Foundation
 
-class Homebrew {
+public class Homebrew {
     private let database: Database
 
-    init(database: Database) {
+    public init(database: Database) {
         self.database = database
     }
 
@@ -144,7 +144,7 @@ class Homebrew {
         return []
     }
 
-    static func isBrewAvailable() -> Bool {
+    public static func isBrewAvailable() -> Bool {
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/sh")
         task.arguments = ["-c", "command -v brew > /dev/null 2>&1"]

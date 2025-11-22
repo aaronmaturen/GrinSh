@@ -52,7 +52,7 @@ struct ClaudeResponse: Codable {
     }
 }
 
-class Agent {
+public class Agent {
     private let config: GrinshConfig
     private let context: Context
     private let database: Database
@@ -68,7 +68,7 @@ class Agent {
     // Learned tools
     private var learnedTools: [String: LearnedTool] = [:]
 
-    init(config: GrinshConfig, context: Context, database: Database, homebrew: Homebrew) {
+    public init(config: GrinshConfig, context: Context, database: Database, homebrew: Homebrew) {
         self.config = config
         self.context = context
         self.database = database
@@ -92,11 +92,11 @@ class Agent {
         }
     }
 
-    func clearContext() {
+    public func clearContext() {
         context.clear()
     }
 
-    func processInput(_ input: String) -> String {
+    public func processInput(_ input: String) -> String {
         // Add user message to context
         context.addUserMessage(input)
 

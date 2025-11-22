@@ -121,10 +121,6 @@ pre code {
     z-index: 1;
 }
 
-section {
-    padding: var(--spacing-xl) 0;
-}
-
 /* ============================================
    Header
    ============================================ */
@@ -132,422 +128,70 @@ section {
 .site-header {
     padding: var(--spacing-lg) 0 var(--spacing-md);
     text-align: center;
+    border-bottom: 1px solid rgba(141, 245, 94, 0.2);
 }
 
-.logo-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-md);
+.logo {
+    max-width: 200px;
+    height: auto;
     margin-bottom: var(--spacing-sm);
 }
 
-.terminal-face {
-    background: var(--terminal-graphite);
-    border-radius: 12px 8px 10px 14px;
-    padding: 0.5rem;
-    min-width: 120px;
-}
-
-.terminal-bar {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 0.5rem;
-}
-
-.terminal-bar .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--chalk-white);
-    opacity: 0.3;
-}
-
-.face {
-    text-align: center;
-    padding: 0.5rem;
-}
-
-.eyes {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    font-size: 1.5rem;
+.site-header h1 {
     color: var(--mischief-lime);
-    margin-bottom: 0.25rem;
-}
-
-.eye-left, .eye-right {
-    display: inline-block;
-    font-weight: 700;
-}
-
-.grin {
-    font-size: 2rem;
-    color: var(--mischief-lime);
-    font-weight: 700;
-    display: block;
-}
-
-.brand-name {
-    font-size: 4rem;
-    color: var(--mischief-lime);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    font-weight: 700;
-    line-height: 1;
+    margin-bottom: var(--spacing-xs);
 }
 
 .tagline {
-    font-size: 1.25rem;
-    color: var(--chalk-white);
-    opacity: 0.8;
-}
-
-/* ============================================
-   Hero Section
-   ============================================ */
-
-.hero {
-    padding: var(--spacing-lg) 0;
-}
-
-.hero-content {
-    text-align: center;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-md);
-    color: var(--chalk-white);
-    line-height: 1.1;
-}
-
-.hero-description {
-    font-size: 1.5rem;
-    margin-bottom: var(--spacing-lg);
-    opacity: 0.9;
-}
-
-.terminal-demo {
-    background: var(--terminal-graphite);
-    border-radius: 12px 10px 14px 8px;
-    margin: var(--spacing-lg) 0;
-    overflow: hidden;
-    border: 2px solid rgba(141, 245, 94, 0.1);
-}
-
-.terminal-header {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.terminal-header .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--mischief-lime);
-    opacity: 0.4;
-}
-
-.terminal-title {
-    margin-left: auto;
-    font-size: 0.9rem;
-    opacity: 0.6;
-}
-
-.terminal-body {
-    padding: 1.5rem;
-    font-family: "JetBrains Mono", monospace;
-}
-
-.prompt-line {
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-}
-
-.prompt {
-    color: var(--mean-lime);
-    font-weight: 600;
-}
-
-.command {
-    color: var(--chalk-white);
-    font-size: 1rem;
-}
-
-/* ============================================
-   CTA Buttons
-   ============================================ */
-
-.cta-buttons {
-    display: flex;
-    gap: var(--spacing-md);
-    justify-content: center;
-    margin-top: var(--spacing-lg);
-}
-
-.btn {
-    display: inline-block;
-    padding: 1rem 2rem;
-    border-radius: 8px 10px 8px 10px;
-    font-weight: 600;
     font-size: 1.1rem;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    border: 2px solid;
-}
-
-.btn-primary {
-    background: var(--mischief-lime);
-    color: var(--midnight-navy);
-    border-color: var(--mischief-lime);
-}
-
-.btn-primary:hover {
-    background: var(--mean-lime);
-    border-color: var(--mean-lime);
-    color: var(--midnight-navy);
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background: transparent;
-    color: var(--mischief-lime);
-    border-color: var(--mischief-lime);
-}
-
-.btn-secondary:hover {
-    background: rgba(141, 245, 94, 0.1);
-    border-color: var(--mean-lime);
-    color: var(--mean-lime);
-}
-
-/* ============================================
-   Sections
-   ============================================ */
-
-.section-title {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: var(--spacing-lg);
-    color: var(--mischief-lime);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* ============================================
-   Features
-   ============================================ */
-
-.features {
-    background: rgba(26, 31, 43, 0.3);
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-md);
-}
-
-.feature-card {
-    background: var(--terminal-graphite);
-    padding: var(--spacing-md);
-    border-radius: 10px 12px 10px 14px;
-    border: 2px solid rgba(141, 245, 94, 0.1);
-    transition: all 0.3s ease;
-}
-
-.feature-card:hover {
-    border-color: var(--mischief-lime);
-    transform: translateY(-4px);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-sm);
-}
-
-.feature-card h3 {
-    color: var(--mischief-lime);
-    margin-bottom: var(--spacing-sm);
-}
-
-.feature-card p {
-    opacity: 0.9;
-}
-
-/* ============================================
-   Installation
-   ============================================ */
-
-.install-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.install-method {
-    background: var(--terminal-graphite);
-    padding: var(--spacing-md);
-    border-radius: var(--grinsh-radius);
-    margin-bottom: var(--spacing-md);
-    border: 2px solid rgba(141, 245, 94, 0.1);
-}
-
-.install-method h3 {
-    color: var(--mischief-lime);
-    margin-bottom: var(--spacing-sm);
-}
-
-.code-block {
-    position: relative;
-    margin: var(--spacing-sm) 0;
-}
-
-.code-block pre {
-    margin: 0;
-    padding-right: 4rem;
-}
-
-.copy-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: var(--mischief-lime);
-    color: var(--midnight-navy);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: all 0.2s ease;
-}
-
-.copy-btn:hover {
-    background: var(--mean-lime);
-}
-
-.install-note {
-    margin-top: var(--spacing-sm);
-    opacity: 0.8;
-    font-size: 0.9rem;
-}
-
-.checklist, .steps-list {
-    margin-top: var(--spacing-sm);
-    padding-left: var(--spacing-md);
-}
-
-.checklist li, .steps-list li {
-    margin-bottom: 0.5rem;
-    opacity: 0.9;
-}
-
-/* ============================================
-   How It Works
-   ============================================ */
-
-.how-it-works {
-    background: rgba(26, 31, 43, 0.3);
-}
-
-.workflow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-    flex-wrap: wrap;
-}
-
-.workflow-step {
-    background: var(--terminal-graphite);
-    padding: var(--spacing-md);
-    border-radius: var(--grinsh-radius);
-    text-align: center;
-    min-width: 200px;
-    flex: 1;
-    max-width: 300px;
-    border: 2px solid rgba(141, 245, 94, 0.1);
-}
-
-.step-number {
-    width: 48px;
-    height: 48px;
-    background: var(--mischief-lime);
-    color: var(--midnight-navy);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin: 0 auto var(--spacing-sm);
-}
-
-.workflow-step h3 {
-    color: var(--mischief-lime);
-    margin-bottom: 0.5rem;
-}
-
-.workflow-arrow {
-    color: var(--mischief-lime);
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.architecture-note {
-    background: var(--terminal-graphite);
-    padding: var(--spacing-md);
-    border-radius: var(--grinsh-radius);
-    border-left: 4px solid var(--mischief-lime);
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* ============================================
-   Documentation
-   ============================================ */
-
-.docs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-md);
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.doc-card {
-    background: var(--terminal-graphite);
-    padding: var(--spacing-md);
-    border-radius: var(--grinsh-radius);
-    border: 2px solid rgba(141, 245, 94, 0.1);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: block;
-}
-
-.doc-card:hover {
-    border-color: var(--mischief-lime);
-    transform: translateY(-4px);
-}
-
-.doc-card h3 {
-    color: var(--mischief-lime);
-    margin-bottom: 0.5rem;
-}
-
-.doc-card p {
     color: var(--chalk-white);
     opacity: 0.8;
+}
+
+/* ============================================
+   Main Content
+   ============================================ */
+
+main {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-xl);
+}
+
+section {
+    margin-bottom: var(--spacing-lg);
+}
+
+section h2 {
+    color: var(--mischief-lime);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(141, 245, 94, 0.2);
+    padding-bottom: var(--spacing-sm);
+}
+
+section h3 {
+    color: var(--mischief-lime);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+section p {
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.7;
+}
+
+section ul,
+section ol {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-md);
+    line-height: 1.7;
+}
+
+section li {
+    margin-bottom: var(--spacing-xs);
+}
+
+section li strong {
+    color: var(--mischief-lime);
 }
 
 /* ============================================
@@ -555,83 +199,15 @@ section {
    ============================================ */
 
 .site-footer {
-    background: var(--terminal-graphite);
-    padding: var(--spacing-lg) 0 var(--spacing-md);
+    border-top: 1px solid rgba(141, 245, 94, 0.2);
+    padding: var(--spacing-md) 0;
     margin-top: var(--spacing-xl);
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-md);
-}
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
-}
-
-.terminal-face-small {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.2rem;
-    color: var(--mischief-lime);
-}
-
-.terminal-face-small .eye {
-    font-weight: 700;
-}
-
-.terminal-face-small .grin {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.brand-name-small {
-    font-size: 1.5rem;
-    color: var(--mischief-lime);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-}
-
-.footer-tagline {
-    opacity: 0.7;
-    font-size: 0.9rem;
-}
-
-.footer-section h4 {
-    color: var(--mischief-lime);
-    margin-bottom: var(--spacing-sm);
-    font-size: 1.1rem;
-}
-
-.footer-links {
-    list-style: none;
-}
-
-.footer-links li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-links a {
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-}
-
-.footer-links a:hover {
-    opacity: 1;
-}
-
-.footer-bottom {
     text-align: center;
-    padding-top: var(--spacing-md);
-    border-top: 1px solid rgba(141, 245, 94, 0.1);
-    opacity: 0.6;
-    font-size: 0.9rem;
+}
+
+.site-footer p {
+    opacity: 0.7;
+    margin-bottom: var(--spacing-xs);
 }
 
 /* ============================================
@@ -639,48 +215,19 @@ section {
    ============================================ */
 
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-description {
-        font-size: 1.2rem;
-    }
-
-    .brand-name {
+    h1 {
         font-size: 2.5rem;
     }
 
-    .logo-area {
-        flex-direction: column;
-        gap: var(--spacing-sm);
-    }
-
-    .cta-buttons {
-        flex-direction: column;
-        gap: var(--spacing-sm);
-    }
-
-    .workflow {
-        flex-direction: column;
-    }
-
-    .workflow-arrow {
-        transform: rotate(90deg);
-    }
-
-    .section-title {
+    h2 {
         font-size: 2rem;
     }
-}
 
-@media (max-width: 480px) {
-    .terminal-demo {
-        font-size: 0.9rem;
+    .logo {
+        max-width: 150px;
     }
 
-    .prompt-line {
-        flex-direction: column;
-        gap: 0.5rem;
+    pre {
+        font-size: 0.85rem;
     }
 }

@@ -1,9 +1,9 @@
 import Foundation
 
-struct GrinshConfig: Codable {
-    var apiKey: String
-    var model: String
-    var contextLimit: Int
+public struct GrinshConfig: Codable {
+    public var apiKey: String
+    public var model: String
+    public var contextLimit: Int
 
     enum CodingKeys: String, CodingKey {
         case apiKey = "api_key"
@@ -18,11 +18,11 @@ struct GrinshConfig: Codable {
     )
 }
 
-class Config {
+public class Config {
     private static let configPath = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent(".grinshrc")
 
-    static func load() -> GrinshConfig {
+    public static func load() -> GrinshConfig {
         guard FileManager.default.fileExists(atPath: configPath.path) else {
             print("Config file not found at \(configPath.path)")
             print("Please create ~/.grinshrc with your Claude API key.")

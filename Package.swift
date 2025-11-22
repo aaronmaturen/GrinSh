@@ -34,12 +34,21 @@ let package = Package(
             name: "grinsh",
             dependencies: ["GrinshCore"],
             path: "Sources",
+            exclude: [
+                "Agent.swift",
+                "Config.swift",
+                "Context.swift",
+                "Database.swift",
+                "Homebrew.swift",
+                "Tools"
+            ],
             sources: ["main.swift"]
         ),
         .testTarget(
             name: "GrinshCoreTests",
             dependencies: ["GrinshCore"],
-            path: "Tests"
+            path: "Tests",
+            exclude: ["README.md"]
         )
     ]
 )

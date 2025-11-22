@@ -24,7 +24,7 @@ struct BrewPackage {
     let updatedAt: Date
 }
 
-class Database {
+public class Database {
     private let db: Connection
     private let dbPath: String
 
@@ -64,7 +64,7 @@ class Database {
     private let histInput = Expression<String>("input")
     private let histTimestamp = Expression<Date>("timestamp")
 
-    init() throws {
+    public init() throws {
         // Create ~/.grinsh directory if it doesn't exist
         let grinshDir = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent(".grinsh")

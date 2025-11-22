@@ -5,12 +5,12 @@ struct ConversationMessage: Codable {
     let content: String
 }
 
-class Context {
+public class Context {
     private let database: Database
     private let config: GrinshConfig
     private var messages: [ConversationMessage] = []
 
-    init(database: Database, config: GrinshConfig) {
+    public init(database: Database, config: GrinshConfig) {
         self.database = database
         self.config = config
         loadMessages()
