@@ -297,6 +297,16 @@ grinsh/
 
 ### Building
 
+Using Makefile (recommended):
+```bash
+make build         # Debug build
+make release       # Release build
+make test          # Run tests
+make clean         # Clean artifacts
+make install       # Install to /usr/local/bin
+```
+
+Using Swift directly:
 ```bash
 # Debug build
 swift build
@@ -313,6 +323,12 @@ swift package clean
 
 ### Testing
 
+Using Makefile:
+```bash
+make test          # Run tests in parallel
+```
+
+Using Swift directly:
 ```bash
 # Run all tests
 swift test
@@ -329,6 +345,18 @@ swift test --enable-code-coverage
 # Verbose output
 swift test -v
 ```
+
+### Releasing New Versions
+
+Create a new release with automatic version bumping:
+
+```bash
+make bump          # Bump minor version (default): 1.0.0 → 1.1.0
+make bump-major    # Bump major version: 1.0.0 → 2.0.0
+make bump-patch    # Bump patch version: 1.0.0 → 1.0.1
+```
+
+See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for detailed release instructions.
 
 The test suite includes:
 - Configuration parsing tests
