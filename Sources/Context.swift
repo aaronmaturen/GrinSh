@@ -1,8 +1,8 @@
 import Foundation
 
-struct ConversationMessage: Codable {
-    let role: String
-    let content: String
+public struct ConversationMessage: Codable {
+    public let role: String
+    public let content: String
 }
 
 public class Context {
@@ -53,15 +53,15 @@ public class Context {
         }
     }
 
-    func getMessages() -> [ConversationMessage] {
+    public func getMessages() -> [ConversationMessage] {
         return messages
     }
 
-    func getMessagesForAPI() -> [[String: String]] {
+    public func getMessagesForAPI() -> [[String: String]] {
         return messages.map { ["role": $0.role, "content": $0.content] }
     }
 
-    func clear() {
+    public func clear() {
         messages = []
         do {
             try database.clearMessages()
@@ -76,7 +76,7 @@ public class Context {
         }
     }
 
-    func getSystemPrompt() -> String {
+    public func getSystemPrompt() -> String {
         let learnedTools = getLearnedToolsDescription()
 
         return """

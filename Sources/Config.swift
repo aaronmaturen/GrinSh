@@ -42,7 +42,7 @@ public class Config {
         }
     }
 
-    static func parseTOMLForTesting(_ content: String) throws -> GrinshConfig {
+    public static func parseTOMLForTesting(_ content: String) throws -> GrinshConfig {
         return try parseTOML(content)
     }
 

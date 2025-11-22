@@ -1,27 +1,27 @@
 import Foundation
 import SQLite
 
-struct Message {
-    let id: Int64
-    let role: String
-    let content: String
-    let timestamp: Date
+public struct Message {
+    public let id: Int64
+    public let role: String
+    public let content: String
+    public let timestamp: Date
 }
 
-struct ToolRecord {
-    let id: Int64
-    let name: String
-    let description: String
-    let usage: String
-    let examples: String
-    let learnedAt: Date
+public struct ToolRecord {
+    public let id: Int64
+    public let name: String
+    public let description: String
+    public let usage: String
+    public let examples: String
+    public let learnedAt: Date
 }
 
-struct BrewPackage {
-    let name: String
-    let installed: Bool
-    let description: String
-    let updatedAt: Date
+public struct BrewPackage {
+    public let name: String
+    public let installed: Bool
+    public let description: String
+    public let updatedAt: Date
 }
 
 public class Database {
@@ -137,7 +137,7 @@ public class Database {
 
     // MARK: - Messages
 
-    func addMessage(role: String, content: String) throws -> Int64 {
+    public func addMessage(role: String, content: String) throws -> Int64 {
         let insert = messages.insert(
             msgRole <- role,
             msgContent <- content,
@@ -146,7 +146,7 @@ public class Database {
         return try db.run(insert)
     }
 
-    func getRecentMessages(limit: Int) throws -> [Message] {
+    public func getRecentMessages(limit: Int) throws -> [Message] {
         var result: [Message] = []
         let query = messages
             .order(msgId.desc)
@@ -164,13 +164,13 @@ public class Database {
         return result.reversed()
     }
 
-    func clearMessages() throws {
+    public func clearMessages() throws {
         try db.run(messages.delete())
     }
 
     // MARK: - Tools
 
-    func saveTool(name: String, description: String, usage: String, examples: String) throws {
+    public func saveTool(name: String, description: String, usage: String, examples: String) throws {
         let insert = tools.insert(or: .replace,
             toolName <- name,
             toolDescription <- description,
@@ -181,7 +181,7 @@ public class Database {
         try db.run(insert)
     }
 
-    func getTool(name: String) throws -> ToolRecord? {
+    public func getTool(name: String) throws -> ToolRecord? {
         let query = tools.filter(toolName == name)
         guard let row = try db.pluck(query) else {
             return nil
@@ -197,7 +197,7 @@ public class Database {
         )
     }
 
-    func getAllTools() throws -> [ToolRecord] {
+    public func getAllTools() throws -> [ToolRecord] {
         var result: [ToolRecord] = []
         for row in try db.prepare(tools) {
             result.append(ToolRecord(
@@ -214,7 +214,7 @@ public class Database {
 
     // MARK: - Brew Cache
 
-    func updateBrewCache(name: String, installed: Bool, description: String) throws {
+    public func updateBrewCache(name: String, installed: Bool, description: String) throws {
         let insert = brewCache.insert(or: .replace,
             brewName <- name,
             brewInstalled <- installed,
@@ -224,7 +224,7 @@ public class Database {
         try db.run(insert)
     }
 
-    func getBrewPackage(name: String) throws -> BrewPackage? {
+    public func getBrewPackage(name: String) throws -> BrewPackage? {
         let query = brewCache.filter(brewName == name)
         guard let row = try db.pluck(query) else {
             return nil
@@ -247,7 +247,7 @@ public class Database {
 
     // MARK: - Preferences
 
-    func setPreference(key: String, value: String) throws {
+    public func setPreference(key: String, value: String) throws {
         let insert = preferences.insert(or: .replace,
             prefKey <- key,
             prefValue <- value
@@ -255,14 +255,14 @@ public class Database {
         try db.run(insert)
     }
 
-    func getPreference(key: String) throws -> String? {
+    public func getPreference(key: String) throws -> String? {
         let query = preferences.filter(prefKey == key)
         return try db.pluck(query)?[prefValue]
     }
 
     // MARK: - History
 
-    func addHistory(input: String) throws {
+    public func addHistory(input: String) throws {
         let insert = history.insert(
             histInput <- input,
             histTimestamp <- Date()
@@ -270,7 +270,7 @@ public class Database {
         try db.run(insert)
     }
 
-    func getHistory(limit: Int = 100) throws -> [(id: Int64, input: String, timestamp: Date)] {
+    public func getHistory(limit: Int = 100) throws -> [(id: Int64, input: String, timestamp: Date)] {
         var result: [(Int64, String, Date)] = []
         let query = history
             .order(histId.desc)

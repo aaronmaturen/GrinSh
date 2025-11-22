@@ -1,106 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GrinSh - A conversational shell for macOS that knows more than you do">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A conversational shell for macOS that couldn't care less about your ability to remember arcane flags. Just say what you want in plain English."
+    />
     <title>GrinSh - Conversational Shell for macOS</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div class="background-gradient"></div>
 
     <header class="site-header">
-        <div class="container">
-            <img src="images/logo.png" alt="GrinSh Logo" class="logo">
-            <h1>GrinSh</h1>
-            <p class="tagline">A conversational shell for macOS</p>
-        </div>
+      <div class="container">
+        <img src="images/logo.png" alt="GrinSh Logo" class="logo" />
+        <h1>GrinSh</h1>
+        <p class="tagline">A conversational shell that knows more than you do</p>
+      </div>
     </header>
 
     <main>
-        <div class="container">
-            <section id="about">
-                <h2>About</h2>
-                <p>GrinSh is a conversational shell for macOS that understands natural language. No flags, no man pages, no syntax to remember. Just say what you want, and grinsh does it.</p>
+      <div class="container">
+        <section id="about">
+          <h2>About</h2>
+          <p>
+            Let's be honest: you hate memorizing commands. You despise man pages.
+            The very sight of <code>tar -xzvf</code> makes your heart grow three
+            sizes smaller.
+          </p>
 
-                <h3>Examples</h3>
-                <pre><code>&gt; what's using port 8080
+          <p>
+            GrinSh is a conversational shell for macOS that couldn't care less
+            about your ability to remember arcane flags and cryptic syntax. Just
+            tell it what you want in plain English, and it gets to work. No
+            studying. No googling "how to find files modified in the last week"
+            for the hundredth time. No pretending you remember what
+            <code>awk</code> does.
+          </p>
+
+          <h3>What It Looks Like</h3>
+          <p>Talk to your terminal like a normal human being:</p>
+          <pre><code>&gt; what's using port 8080
 &gt; compress the projects folder
 &gt; find that pdf I downloaded last week
 &gt; quit slack</code></pre>
-            </section>
 
-            <section id="features">
-                <h2>Features</h2>
-                <ul>
-                    <li><strong>Natural Language:</strong> Just say what you want in plain English. No syntax to remember.</li>
-                    <li><strong>Native macOS:</strong> Built with Swift, using native macOS APIs for files, apps, and system operations.</li>
-                    <li><strong>Auto-installing Tools:</strong> Discovers and installs CLI tools via Homebrew on demand.</li>
-                    <li><strong>Conversation Memory:</strong> Remembers context across your session for smarter interactions.</li>
-                    <li><strong>Touch ID Support:</strong> Privileged operations use native macOS authentication.</li>
-                    <li><strong>Escape Hatch:</strong> Run raw commands with <code>!command</code> when you need it.</li>
-                </ul>
-            </section>
+          <p>
+            Notice anything? No flags. No pipes. No syntax errors because you
+            forgot a semicolon. Just requests in actual English.
+          </p>
+        </section>
 
-            <section id="install">
-                <h2>Installation</h2>
+        <section id="why">
+          <h2>Why GrinSh Exists</h2>
+          <p>
+            Because life is too short to remember whether it's <code>-la</code>
+            or <code>-al</code>. Because you have better things to do than
+            memorize the seventeen different ways to kill a process. Because the
+            year is 2025 and we shouldn't need a PhD to interact with our
+            computers.
+          </p>
 
-                <h3>Quick Install (Recommended)</h3>
-                <pre><code>curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash</code></pre>
-                <p>This will download the latest release, verify checksums, and install to <code>/usr/local/bin</code></p>
+          <p>
+            GrinSh knows more than you do, and it's not smug about it. It
+            understands context, remembers what you were doing, and figures out
+            the right tool for the job. If it doesn't have a tool, it finds one,
+            installs it, learns it, and gets on with things.
+          </p>
 
-                <h3>Prerequisites</h3>
-                <ul>
-                    <li>macOS 13.0 or later</li>
-                    <li>Claude API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
-                    <li>Homebrew (recommended, for CLI tool installation)</li>
-                </ul>
+          <p>
+            Built with Swift and powered by Claude, GrinSh uses native macOS
+            APIs whenever possible and falls back to CLI tools when necessary.
+            It's fast, it's smart, and it doesn't make you feel like you're
+            taking a Unix certification exam every time you want to compress a
+            file.
+          </p>
+        </section>
 
-                <h3>Next Steps</h3>
-                <ol>
-                    <li>Add your Claude API key to <code>~/.grinshrc</code></li>
-                    <li>Run <code>grinsh</code> to start</li>
-                    <li>(Optional) Set as default shell with <code>chsh -s /usr/local/bin/grinsh</code></li>
-                </ol>
-            </section>
+        <section id="features">
+          <h2>What It Does</h2>
+          <p>
+            <strong>Understands Natural Language.</strong> Say what you want.
+            Don't worry about syntax, flags, or the "proper" way to phrase
+            things. GrinSh figures it out.
+          </p>
 
-            <section id="how-it-works">
-                <h2>How It Works</h2>
-                <ol>
-                    <li><strong>You speak:</strong> Type your request in natural language</li>
-                    <li><strong>Claude interprets:</strong> AI understands your intent and finds the right tool</li>
-                    <li><strong>GrinSh executes:</strong> Native APIs or CLI tools get the job done</li>
-                </ol>
-                <p><em>Built-in tools use native Swift APIs. Unknown tools are discovered via Homebrew, learned from documentation, and cached for future use.</em></p>
-            </section>
+          <p>
+            <strong>Remembers Your Conversation.</strong> Unlike your goldfish
+            of a bash prompt, GrinSh maintains context across your session.
+            Reference "that folder" or "the file from earlier" and it knows what
+            you mean.
+          </p>
 
-            <section id="docs">
-                <h2>Documentation</h2>
-                <ul>
-                    <li><a href="https://github.com/aaronmaturen/GrinSh/blob/main/README.md">README</a> - Complete overview and getting started guide</li>
-                    <li><a href="https://github.com/aaronmaturen/GrinSh/blob/main/CONTRIBUTING.md">Contributing</a> - Development setup and contribution guidelines</li>
-                    <li><a href="https://github.com/aaronmaturen/GrinSh/blob/main/documentation/RELEASE_PROCESS.md">Release Process</a> - How to create and publish new releases</li>
-                    <li><a href="https://github.com/aaronmaturen/GrinSh/releases">Releases</a> - Download pre-built binaries</li>
-                </ul>
-            </section>
-        </div>
+          <p>
+            <strong>Auto-installs Missing Tools.</strong> Need a CLI tool you
+            don't have? GrinSh discovers it via Homebrew, installs it, reads its
+            documentation, and uses it. All without bothering you.
+          </p>
+
+          <p>
+            <strong>Uses Touch ID for Privileged Operations.</strong> No more
+            typing your password like a caveman. When something needs sudo, you
+            get a native macOS authentication prompt.
+          </p>
+
+          <p>
+            <strong>Gives You an Escape Hatch.</strong> Sometimes you actually
+            do want to run a raw command. Prefix it with <code>!</code> and
+            GrinSh gets out of your way: <code>!git status</code>
+          </p>
+
+          <p>
+            <strong>Stays Native.</strong> Built with Swift, using macOS APIs
+            for file operations, app management, and system tasks. It's not a
+            wrapper around bash scripts held together with duct tape and prayers.
+          </p>
+        </section>
+
+        <section id="install">
+          <h2>Installation</h2>
+
+          <p>
+            Getting GrinSh up and running takes about thirty seconds. Copy this
+            line, paste it into your terminal, and let it do its thing:
+          </p>
+
+          <pre><code>curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash</code></pre>
+
+          <p>
+            The installer downloads the latest release, verifies the checksums
+            (because we're not monsters), and drops the binary in
+            <code>/usr/local/bin</code>.
+          </p>
+
+          <h3>What You Need</h3>
+          <p>
+            Not much. You need macOS 13.0 or later, because we're not supporting
+            ancient history. You need a Claude API key from
+            <a href="https://console.anthropic.com" target="_blank"
+              >console.anthropic.com</a
+            >
+            (that's what powers the natural language understanding). And you
+            probably want Homebrew installed, because that's how GrinSh finds
+            and installs CLI tools on demand.
+          </p>
+
+          <h3>First Launch</h3>
+          <p>
+            After installation, drop your Claude API key into
+            <code>~/.grinshrc</code> and run <code>grinsh</code>. That's it.
+            You're done.
+          </p>
+
+          <p>
+            If you're feeling bold and want to make GrinSh your default shell,
+            run <code>chsh -s /usr/local/bin/grinsh</code>. But maybe try it out
+            first. We're confident, not reckless.
+          </p>
+        </section>
+
+        <section id="how-it-works">
+          <h2>How It Works</h2>
+
+          <p>
+            The flow is straightforward: you type what you want in plain
+            English. Claude interprets your intent and figures out which tool or
+            API call will get it done. GrinSh executes it using native Swift
+            APIs when possible, or the appropriate CLI tool when necessary.
+          </p>
+
+          <p>
+            When GrinSh encounters a tool it doesn't have, it doesn't throw an
+            error and make you google things. It searches Homebrew, finds the
+            package, installs it, pulls down its documentation, learns how to
+            use it, and caches that knowledge for next time. All of this happens
+            in the background while you're doing literally anything else.
+          </p>
+
+          <p>
+            The whole system maintains conversation context, so you can say
+            things like "compress that" or "move it to the desktop" and GrinSh
+            knows what you're referring to. It's almost like talking to someone
+            who's paying attention.
+          </p>
+        </section>
+
+        <section id="docs">
+          <h2>More Information</h2>
+          <p>
+            The
+            <a
+              href="https://github.com/aaronmaturen/GrinSh/blob/main/README.md"
+              >README</a
+            >
+            has the full overview and getting started guide. If you want to
+            contribute (and we genuinely hope you do), check out the
+            <a
+              href="https://github.com/aaronmaturen/GrinSh/blob/main/CONTRIBUTING.md"
+              >contributing guidelines</a
+            >. The
+            <a
+              href="https://github.com/aaronmaturen/GrinSh/blob/main/documentation/RELEASE_PROCESS.md"
+              >release process documentation</a
+            >
+            explains how we cut new versions. And the
+            <a href="https://github.com/aaronmaturen/GrinSh/releases"
+              >releases page</a
+            >
+            has pre-built binaries if you prefer to skip the installer script.
+          </p>
+
+          <p>
+            Found a bug? Have a feature request? File an issue on
+            <a href="https://github.com/aaronmaturen/GrinSh/issues">GitHub</a>.
+            We actually read them.
+          </p>
+        </section>
+      </div>
     </main>
 
     <footer class="site-footer">
-        <div class="container">
-            <p>
-                <a href="https://github.com/aaronmaturen/GrinSh">GitHub</a> |
-                <a href="https://github.com/aaronmaturen/GrinSh/issues">Issues</a> |
-                <a href="https://github.com/aaronmaturen/GrinSh/releases">Releases</a> |
-                <a href="https://console.anthropic.com">Get API Key</a> |
-                <a href="https://brew.sh">Homebrew</a>
-            </p>
-            <p>&copy; 2025 GrinSh Contributors. Released under the MIT License.</p>
-        </div>
+      <div class="container">
+        <p>
+          <a href="https://github.com/aaronmaturen/GrinSh">GitHub</a> |
+          <a href="https://github.com/aaronmaturen/GrinSh/issues">Issues</a> |
+          <a href="https://github.com/aaronmaturen/GrinSh/releases">Releases</a>
+          | <a href="https://console.anthropic.com">Get API Key</a> |
+          <a href="https://brew.sh">Homebrew</a>
+        </p>
+        <p>
+          &copy; 2025 GrinSh Contributors. MIT License. Use it, break it, fix
+          it. We don't care.
+        </p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
