@@ -1,0 +1,201 @@
+name: Auto-bump PR Version
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-and-bump:
+    name: Check and Auto-bump Version
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Get current VERSION from PR
+      id: pr_version
+      run: |
+        if [ ! -f VERSION ]; then
+          echo "VERSION file not found, skipping check"
+          echo "SKIP=true" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+        PR_VERSION=$(cat VERSION | tr -d '[:space:]')
+        echo "PR_VERSION=${PR_VERSION}" >> $GITHUB_OUTPUT
+        echo "PR VERSION: ${PR_VERSION}"
+
+    - name: Get latest release version
+      id: latest_release
+      run: |
+        # Try to get latest release tag
+        LATEST_TAG=$(git tag -l 'v*' | sort -V | tail -1)
+
+        if [ -z "$LATEST_TAG" ]; then
+          echo "No release tags found, skipping version check"
+          echo "SKIP=true" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        # Remove 'v' prefix
+        LATEST_VERSION="${LATEST_TAG#v}"
+        echo "LATEST_VERSION=${LATEST_VERSION}" >> $GITHUB_OUTPUT
+        echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_OUTPUT
+        echo "Latest release: ${LATEST_VERSION} (${LATEST_TAG})"
+
+    - name: Compare versions
+      id: compare
+      if: steps.pr_version.outputs.SKIP != 'true' && steps.latest_release.outputs.SKIP != 'true'
+      run: |
+        PR_VERSION="${{ steps.pr_version.outputs.PR_VERSION }}"
+        LATEST_VERSION="${{ steps.latest_release.outputs.LATEST_VERSION }}"
+
+        if [ "$PR_VERSION" == "$LATEST_VERSION" ]; then
+          echo "NEEDS_BUMP=true" >> $GITHUB_OUTPUT
+          echo "⚠️ VERSION ($PR_VERSION) matches latest release ($LATEST_VERSION)"
+          echo "Version needs to be bumped before merge"
+        else
+          echo "NEEDS_BUMP=false" >> $GITHUB_OUTPUT
+          echo "✓ VERSION ($PR_VERSION) is different from latest release ($LATEST_VERSION)"
+        fi
+
+    - name: Configure Git
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Auto-bump version (minor)
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      id: bump
+      run: |
+        CURRENT_VERSION="${{ steps.pr_version.outputs.PR_VERSION }}"
+
+        # Parse version
+        IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+        MAJOR="${VERSION_PARTS[0]}"
+        MINOR="${VERSION_PARTS[1]}"
+        PATCH="${VERSION_PARTS[2]}"
+
+        # Bump minor version (default)
+        MINOR=$((MINOR + 1))
+        PATCH=0
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+
+        echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_OUTPUT
+        echo "Bumping version: ${CURRENT_VERSION} → ${NEW_VERSION}"
+
+        # Update VERSION file
+        echo "$NEW_VERSION" > VERSION
+
+    - name: Update CHANGELOG
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      run: |
+        NEW_VERSION="${{ steps.bump.outputs.NEW_VERSION }}"
+        CURRENT_DATE=$(date +%Y-%m-%d)
+
+        if [ -f "CHANGELOG.md" ] && grep -q "\[Unreleased\]" CHANGELOG.md; then
+          # macOS sed syntax
+          sed -i '' "s/## \[Unreleased\]/## [Unreleased]\n\n## [$NEW_VERSION] - $CURRENT_DATE/" CHANGELOG.md
+          echo "✓ Updated CHANGELOG.md"
+        else
+          echo "⚠️ No [Unreleased] section in CHANGELOG.md, skipping"
+        fi
+
+    - name: Commit version bump
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      run: |
+        NEW_VERSION="${{ steps.bump.outputs.NEW_VERSION }}"
+
+        git add VERSION
+        [ -f CHANGELOG.md ] && git add CHANGELOG.md
+
+        git commit -m "Auto-bump version to ${NEW_VERSION}
+
+This PR was targeting main with version ${{ steps.pr_version.outputs.PR_VERSION }},
+which matches the latest release ${{ steps.latest_release.outputs.LATEST_TAG }}.
+
+Automatically bumped to ${NEW_VERSION} (minor version increment).
+
+[skip ci]"
+
+        echo "✓ Committed version bump"
+
+    - name: Push changes
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      run: |
+        git push origin ${{ github.event.pull_request.head.ref }}
+        echo "✓ Pushed version bump to PR branch"
+
+    - name: Add comment to PR
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const newVersion = '${{ steps.bump.outputs.NEW_VERSION }}';
+          const oldVersion = '${{ steps.pr_version.outputs.PR_VERSION }}';
+          const latestTag = '${{ steps.latest_release.outputs.LATEST_TAG }}';
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: `## 🔄 Auto-bumped Version
+
+          The VERSION file matched the latest release (${latestTag}), so I automatically bumped it.
+
+          - **Previous version:** ${oldVersion}
+          - **New version:** ${newVersion}
+          - **Bump type:** minor (default)
+
+          The changes have been committed to this PR. Please review and merge when ready.
+
+          > To bump a different version type before merge, run:
+          > - \`make bump-major\` for major version
+          > - \`make bump-patch\` for patch version`
+          });
+
+    - name: Create summary
+      if: steps.compare.outputs.NEEDS_BUMP == 'true'
+      run: |
+        cat >> $GITHUB_STEP_SUMMARY <<EOF
+        # Auto-bumped Version
+
+        ✅ Automatically bumped version to prevent merge conflicts.
+
+        | Item | Value |
+        |------|-------|
+        | Previous Version | ${{ steps.pr_version.outputs.PR_VERSION }} |
+        | Latest Release | ${{ steps.latest_release.outputs.LATEST_TAG }} |
+        | New Version | ${{ steps.bump.outputs.NEW_VERSION }} |
+        | Bump Type | minor (default) |
+
+        The VERSION file has been updated and committed to the PR branch.
+        EOF
+
+    - name: Success message
+      if: steps.compare.outputs.NEEDS_BUMP == 'false'
+      run: |
+        cat >> $GITHUB_STEP_SUMMARY <<EOF
+        # Version Check Passed
+
+        ✅ VERSION file is already different from the latest release.
+
+        | Item | Value |
+        |------|-------|
+        | PR Version | ${{ steps.pr_version.outputs.PR_VERSION }} |
+        | Latest Release | ${{ steps.latest_release.outputs.LATEST_TAG }} |
+
+        No version bump needed.
+        EOF

@@ -2,6 +2,16 @@
 
 This document describes how to create releases for grinsh.
 
+## Automatic Version Bumping
+
+**Important:** PRs to `main` are automatically checked for version conflicts. If your PR's VERSION file matches the latest release, the CI will automatically:
+- Bump to the next minor version (default)
+- Update CHANGELOG.md
+- Commit the changes to your PR branch
+- Add a comment explaining the change
+
+This ensures every merge to `main` has a unique version number.
+
 ## Quick Release (Recommended)
 
 The easiest way to release a new version is using the bump-version script with minor bumps as the default:
