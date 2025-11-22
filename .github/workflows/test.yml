@@ -28,11 +28,8 @@ jobs:
     - name: Build
       run: swift build -v
 
-    - name: Run tests
-      run: swift test -v --parallel
-
-    - name: Generate code coverage
-      run: swift test --enable-code-coverage
+    - name: Run tests with coverage
+      run: swift test -v --parallel --enable-code-coverage
 
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
