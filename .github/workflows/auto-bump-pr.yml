@@ -117,18 +117,23 @@ jobs:
       if: steps.compare.outputs.NEEDS_BUMP == 'true'
       run: |
         NEW_VERSION="${{ steps.bump.outputs.NEW_VERSION }}"
+        PR_VERSION="${{ steps.pr_version.outputs.PR_VERSION }}"
+        LATEST_TAG="${{ steps.latest_release.outputs.LATEST_TAG }}"
 
         git add VERSION
         [ -f CHANGELOG.md ] && git add CHANGELOG.md
 
-        git commit -m "Auto-bump version to ${NEW_VERSION}
+        git commit -m "$(cat <<EOF
+Auto-bump version to ${NEW_VERSION}
 
-This PR was targeting main with version ${{ steps.pr_version.outputs.PR_VERSION }},
-which matches the latest release ${{ steps.latest_release.outputs.LATEST_TAG }}.
+This PR was targeting main with version ${PR_VERSION},
+which matches the latest release ${LATEST_TAG}.
 
 Automatically bumped to ${NEW_VERSION} (minor version increment).
 
-[skip ci]"
+[skip ci]
+EOF
+)"
 
         echo "✓ Committed version bump"
 
