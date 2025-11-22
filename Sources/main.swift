@@ -101,8 +101,20 @@ func readLineWithHistory() -> String? {
                         cursorPos -= 1
                         redrawLine(currentLine, cursorPos: cursorPos)
                     }
+                } else if next2 == 72 {  // Home key
+                    cursorPos = 0
+                    redrawLine(currentLine, cursorPos: cursorPos)
+                } else if next2 == 70 {  // End key
+                    cursorPos = currentLine.count
+                    redrawLine(currentLine, cursorPos: cursorPos)
                 }
             }
+        } else if char == 1 {  // Ctrl-A (alternative Home)
+            cursorPos = 0
+            redrawLine(currentLine, cursorPos: cursorPos)
+        } else if char == 5 {  // Ctrl-E (alternative End)
+            cursorPos = currentLine.count
+            redrawLine(currentLine, cursorPos: cursorPos)
         } else if char == 13 || char == 10 {  // Enter/Return
             print("")
             return currentLine
