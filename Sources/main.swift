@@ -14,6 +14,9 @@ func setupSignalHandlers() {
         } else {
             print("\n\n\(Color.dim)Use 'exit' or 'quit' to exit grinsh\(Color.reset)")
         }
+        // Redisplay prompt
+        print("\(Color.blue)>\(Color.reset) ", terminator: "")
+        fflush(stdout)
     }
 
     signal(SIGTERM) { _ in
