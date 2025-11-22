@@ -1,5 +1,18 @@
 import Foundation
 
+public struct Color {
+    public static let reset = "\u{001B}[0m"
+    public static let bold = "\u{001B}[1m"
+    public static let dim = "\u{001B}[2m"
+
+    public static let green = "\u{001B}[32m"
+    public static let yellow = "\u{001B}[33m"
+    public static let blue = "\u{001B}[34m"
+    public static let cyan = "\u{001B}[36m"
+    public static let red = "\u{001B}[31m"
+    public static let magenta = "\u{001B}[35m"
+}
+
 class LoadingSpinner {
     private var isRunning = false
     private var spinnerThread: Thread?
@@ -15,7 +28,7 @@ class LoadingSpinner {
             guard let self = self else { return }
 
             while self.isRunning {
-                print("\r\(self.frames[self.currentFrame]) ", terminator: "")
+                print("\r\(Color.cyan)\(self.frames[self.currentFrame])\(Color.reset) ", terminator: "")
                 fflush(stdout)
 
                 self.currentFrame = (self.currentFrame + 1) % self.frames.count
@@ -149,18 +162,18 @@ public class Agent {
         }
 
         // Show what we're doing
-        print("\n\(agentResponse.explanation)")
+        print("\n\(Color.dim)\(agentResponse.explanation)\(Color.reset)")
 
         // Check if we need to install via brew
         if let brewPackage = agentResponse.installViaBrew {
             if !homebrew.isInstalled(package: brewPackage) {
-                print("\nInstalling \(brewPackage) via Homebrew...")
+                print("\n\(Color.yellow)Installing \(brewPackage) via Homebrew...\(Color.reset)")
                 let (success, output) = homebrew.install(package: brewPackage)
 
                 if !success {
                     let errorMsg = "Could not install \(brewPackage): \(output)"
                     context.addAssistantMessage(errorMsg)
-                    return errorMsg
+                    return "\(Color.red)Error: \(errorMsg)\(Color.reset)"
                 }
 
                 print(output)
@@ -323,9 +336,9 @@ public class Agent {
         }
 
         if result.success {
-            return result.output
+            return "\(Color.green)\(result.output)\(Color.reset)"
         } else {
-            return "Error: \(result.error ?? "Unknown error")"
+            return "\(Color.red)Error: \(result.error ?? "Unknown error")\(Color.reset)"
         }
     }
 

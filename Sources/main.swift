@@ -16,16 +16,16 @@ func setupSignalHandlers() {
 
 // Main REPL loop
 func runREPL(agent: Agent) {
-    print("grinsh - conversational shell")
-    print("Type your request in natural language")
-    print("Type 'exit' or 'quit' to exit")
-    print("Type '!command' to run raw shell commands")
-    print("Type 'clear' to clear conversation history")
+    print("\(Color.bold)\(Color.green)grinsh\(Color.reset) - conversational shell")
+    print("\(Color.dim)Type your request in natural language\(Color.reset)")
+    print("\(Color.dim)Type 'exit' or 'quit' to exit\(Color.reset)")
+    print("\(Color.dim)Type '!command' to run raw shell commands\(Color.reset)")
+    print("\(Color.dim)Type 'clear' to clear conversation history\(Color.reset)")
     print("")
 
     while !shouldExit {
         // Print prompt
-        print("> ", terminator: "")
+        print("\(Color.blue)>\(Color.reset) ", terminator: "")
         fflush(stdout)
 
         // Read input
@@ -41,12 +41,12 @@ func runREPL(agent: Agent) {
         // Handle special commands
         switch input.lowercased() {
         case "exit", "quit":
-            print("Goodbye!")
+            print("\(Color.green)Goodbye!\(Color.reset)")
             return
 
         case "clear":
             agent.clearContext()
-            print("Conversation history cleared")
+            print("\(Color.yellow)Conversation history cleared\(Color.reset)")
             continue
 
         case let cmd where cmd.hasPrefix("!"):
@@ -135,17 +135,17 @@ func main() {
     let config = Config.load()
 
     if config.apiKey.isEmpty {
-        print("Error: No API key configured")
-        print("\nPlease create ~/.grinshrc with your Claude API key:")
-        print("api_key = \"sk-ant-...\"")
-        print("model = \"claude-sonnet-4-20250514\"")
-        print("context_limit = 50")
+        print("\(Color.red)Error: No API key configured\(Color.reset)")
+        print("\n\(Color.yellow)Please create ~/.grinshrc with your Claude API key:\(Color.reset)")
+        print("\(Color.dim)api_key = \"sk-ant-...\"\(Color.reset)")
+        print("\(Color.dim)model = \"claude-sonnet-4-20250514\"\(Color.reset)")
+        print("\(Color.dim)context_limit = 50\(Color.reset)")
         exit(1)
     }
 
     // Initialize database
     guard let database = try? Database() else {
-        print("Error: Could not initialize database")
+        print("\(Color.red)Error: Could not initialize database\(Color.reset)")
         exit(1)
     }
 
@@ -154,8 +154,8 @@ func main() {
 
     // Check if Homebrew is available
     if !Homebrew.isBrewAvailable() {
-        print("Warning: Homebrew not found. CLI tool installation will not be available.")
-        print("Install Homebrew from https://brew.sh")
+        print("\(Color.yellow)Warning: Homebrew not found. CLI tool installation will not be available.\(Color.reset)")
+        print("\(Color.dim)Install Homebrew from https://brew.sh\(Color.reset)")
     }
 
     // Initialize context
