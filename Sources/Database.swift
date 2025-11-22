@@ -8,7 +8,7 @@ struct Message {
     let timestamp: Date
 }
 
-struct Tool {
+struct ToolRecord {
     let id: Int64
     let name: String
     let description: String
@@ -181,13 +181,13 @@ class Database {
         try db.run(insert)
     }
 
-    func getTool(name: String) throws -> Tool? {
+    func getTool(name: String) throws -> ToolRecord? {
         let query = tools.filter(toolName == name)
         guard let row = try db.pluck(query) else {
             return nil
         }
 
-        return Tool(
+        return ToolRecord(
             id: row[toolId],
             name: row[toolName],
             description: row[toolDescription],
@@ -197,10 +197,10 @@ class Database {
         )
     }
 
-    func getAllTools() throws -> [Tool] {
-        var result: [Tool] = []
+    func getAllTools() throws -> [ToolRecord] {
+        var result: [ToolRecord] = []
         for row in try db.prepare(tools) {
-            result.append(Tool(
+            result.append(ToolRecord(
                 id: row[toolId],
                 name: row[toolName],
                 description: row[toolDescription],
