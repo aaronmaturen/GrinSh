@@ -91,6 +91,16 @@ func readLineWithHistory() -> String? {
                         cursorPos = 0
                         redrawLine(currentLine, cursorPos: cursorPos)
                     }
+                } else if next2 == 67 {  // Right arrow
+                    if cursorPos < currentLine.count {
+                        cursorPos += 1
+                        redrawLine(currentLine, cursorPos: cursorPos)
+                    }
+                } else if next2 == 68 {  // Left arrow
+                    if cursorPos > 0 {
+                        cursorPos -= 1
+                        redrawLine(currentLine, cursorPos: cursorPos)
+                    }
                 }
             }
         } else if char == 13 || char == 10 {  // Enter/Return
@@ -100,8 +110,7 @@ func readLineWithHistory() -> String? {
             let character = Character(UnicodeScalar(char))
             currentLine.insert(character, at: currentLine.index(currentLine.startIndex, offsetBy: cursorPos))
             cursorPos += 1
-            print(character, terminator: "")
-            fflush(stdout)
+            redrawLine(currentLine, cursorPos: cursorPos)
         }
     }
 }
@@ -113,8 +122,13 @@ func getChar() -> UInt8? {
 }
 
 func redrawLine(_ line: String, cursorPos: Int) {
-    // Clear line
+    // Clear line and redraw
     print("\r\u{001B}[K\(Color.blue)>\(Color.reset) \(line)", terminator: "")
+
+    // Move cursor to correct position
+    // Position is: "> " (2 chars) + cursorPos
+    let targetColumn = cursorPos + 2
+    print("\r\u{001B}[\(targetColumn)C", terminator: "")
     fflush(stdout)
 }
 
