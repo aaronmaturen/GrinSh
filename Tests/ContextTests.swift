@@ -109,11 +109,11 @@ final class ContextTests: XCTestCase {
         let systemPrompt = context.getSystemPrompt()
 
         // Check for key capabilities
-        XCTAssertTrue(systemPrompt.contains("files"))
-        XCTAssertTrue(systemPrompt.contains("apps"))
-        XCTAssertTrue(systemPrompt.contains("system"))
-        XCTAssertTrue(systemPrompt.contains("clipboard"))
-        XCTAssertTrue(systemPrompt.contains("spotlight"))
+        XCTAssertTrue(systemPrompt.contains("Files"))
+        XCTAssertTrue(systemPrompt.contains("Apps"))
+        XCTAssertTrue(systemPrompt.contains("System"))
+        XCTAssertTrue(systemPrompt.contains("Clipboard"))
+        XCTAssertTrue(systemPrompt.contains("Spotlight"))
         XCTAssertTrue(systemPrompt.contains("Homebrew"))
     }
 
