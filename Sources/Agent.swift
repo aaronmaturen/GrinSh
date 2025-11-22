@@ -117,6 +117,10 @@ public class Agent {
     // Learned tools
     private var learnedTools: [String: LearnedTool] = [:]
 
+    // Current API task for cancellation
+    private var currentTask: URLSessionDataTask?
+    private var currentSpinner: LoadingSpinner?
+
     public init(config: GrinshConfig, context: Context, database: Database, homebrew: Homebrew) {
         self.config = config
         self.context = context
@@ -143,6 +147,13 @@ public class Agent {
 
     public func clearContext() {
         context.clear()
+    }
+
+    public func cancelCurrentRequest() {
+        currentTask?.cancel()
+        currentTask = nil
+        currentSpinner?.stop()
+        currentSpinner = nil
     }
 
     public func processInput(_ input: String) -> String {
@@ -240,14 +251,21 @@ public class Agent {
 
         let semaphore = DispatchSemaphore(value: 0)
 
-        let task = URLSession.shared.dataTask(with: httpRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: httpRequest) { [weak self] data, response, error in
             responseData = data
             responseError = error
             semaphore.signal()
+
+            // Clear current task reference
+            self?.currentTask = nil
         }
+
+        // Store task and spinner for cancellation
+        currentTask = task
 
         // Start loading spinner
         let spinner = LoadingSpinner()
+        currentSpinner = spinner
         spinner.start()
 
         task.resume()
@@ -255,9 +273,14 @@ public class Agent {
 
         // Stop loading spinner
         spinner.stop()
+        currentSpinner = nil
 
         // Handle response
         if let error = responseError {
+            let nsError = error as NSError
+            if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled {
+                return "\n\(Color.yellow)Request cancelled\(Color.reset)"
+            }
             return "Error: \(error.localizedDescription)"
         }
 

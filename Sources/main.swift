@@ -3,10 +3,17 @@ import GrinshCore
 
 // Signal handling
 var shouldExit = false
+var currentAgent: Agent?
 
 func setupSignalHandlers() {
     signal(SIGINT) { _ in
-        print("\n\nUse 'exit' or 'quit' to exit grinsh")
+        // Try to cancel current request first
+        if let agent = currentAgent {
+            agent.cancelCurrentRequest()
+            print("\n")
+        } else {
+            print("\n\n\(Color.dim)Use 'exit' or 'quit' to exit grinsh\(Color.reset)")
+        }
     }
 
     signal(SIGTERM) { _ in
@@ -61,7 +68,9 @@ func runREPL(agent: Agent) {
         }
 
         // Process with agent
+        currentAgent = agent
         let response = agent.processInput(input)
+        currentAgent = nil
         print("\n\(response)\n")
     }
 }
