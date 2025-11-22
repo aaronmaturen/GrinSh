@@ -135,6 +135,7 @@ pre code {
     max-width: 200px;
     height: auto;
     margin-bottom: var(--spacing-sm);
+    color: var(--mischief-lime);
 }
 
 .site-header h1 {
