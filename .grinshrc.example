@@ -1,0 +1,11 @@
+# grinsh configuration file
+# Copy this to ~/.grinshrc and add your Claude API key
+
+# Your Claude API key from console.anthropic.com
+api_key = "sk-ant-..."
+
+# Claude model to use (default: claude-sonnet-4-20250514)
+model = "claude-sonnet-4-20250514"
+
+# Number of conversation messages to keep in context (default: 50)
+context_limit = 50
