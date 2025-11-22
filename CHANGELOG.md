@@ -73,6 +73,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Links
 
-- [GitHub Repository](https://github.com/yourusername/grinsh)
-- [Issue Tracker](https://github.com/yourusername/grinsh/issues)
-- [Releases](https://github.com/yourusername/grinsh/releases)
+- [GitHub Repository](https://github.com/aaronmaturen/GrinSh)
+- [Issue Tracker](https://github.com/aaronmaturen/GrinSh/issues)
+- [Releases](https://github.com/aaronmaturen/GrinSh/releases)

@@ -2,11 +2,11 @@
 
 A conversational shell for macOS.
 
-[![Tests](https://github.com/yourusername/grinsh/actions/workflows/test.yml/badge.svg)](https://github.com/yourusername/grinsh/actions/workflows/test.yml)
-[![Release](https://github.com/yourusername/grinsh/actions/workflows/release.yml/badge.svg)](https://github.com/yourusername/grinsh/actions/workflows/release.yml)
+[![Tests](https://github.com/aaronmaturen/GrinSh/actions/workflows/test.yml/badge.svg)](https://github.com/aaronmaturen/GrinSh/actions/workflows/test.yml)
+[![Release](https://github.com/aaronmaturen/GrinSh/actions/workflows/release.yml/badge.svg)](https://github.com/aaronmaturen/GrinSh/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Installation](#installation) • [Usage](#usage) • [Documentation](#architecture) • [Contributing](CONTRIBUTING.md) • [Releases](https://github.com/yourusername/grinsh/releases)
+[Installation](#installation) • [Usage](#usage) • [Documentation](#architecture) • [Contributing](CONTRIBUTING.md) • [Releases](https://github.com/aaronmaturen/GrinSh/releases)
 
 ---
 
@@ -47,7 +47,7 @@ You open a terminal. Instead of a prompt, there's a conversation. You say what y
 
 ```bash
 # Download latest release
-curl -L https://github.com/yourusername/grinsh/releases/latest/download/grinsh-v1.0.0-macos.tar.gz | tar xz
+curl -L https://github.com/aaronmaturen/GrinSh/releases/latest/download/grinsh-v1.0.0-macos.tar.gz | tar xz
 
 # Install binary
 sudo cp grinsh /usr/local/bin/grinsh
@@ -74,7 +74,7 @@ Requires Swift 5.9 or later:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/grinsh.git
+git clone https://github.com/aaronmaturen/GrinSh.git
 cd grinsh
 
 # Build release binary
