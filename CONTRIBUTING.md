@@ -18,7 +18,7 @@ Thank you for your interest in contributing to grinsh! This document provides gu
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/grinsh.git
+git clone https://github.com/aaronmaturen/GrinSh.git
 cd grinsh
 
 # Build the project
