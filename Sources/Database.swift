@@ -79,6 +79,21 @@ class Database {
         try createTables()
     }
 
+    static func createForTesting(at path: String) throws -> Database {
+        let instance = try Database.__createWithPath(path)
+        return instance
+    }
+
+    private init(dbPath: String) throws {
+        self.dbPath = dbPath
+        self.db = try Connection(dbPath)
+        try createTables()
+    }
+
+    private static func __createWithPath(_ path: String) throws -> Database {
+        return try Database(dbPath: path)
+    }
+
     private func createTables() throws {
         // Messages table
         try db.run(messages.create(ifNotExists: true) { t in

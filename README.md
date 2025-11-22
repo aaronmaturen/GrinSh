@@ -254,9 +254,31 @@ swift package clean
 ### Testing
 
 ```bash
-# Run tests (when test suite is added)
+# Run all tests
 swift test
+
+# Run tests in parallel
+swift test --parallel
+
+# Run specific test
+swift test --filter ConfigTests
+
+# Run with code coverage
+swift test --enable-code-coverage
+
+# Verbose output
+swift test -v
 ```
+
+The test suite includes:
+- Configuration parsing tests
+- Database operation tests
+- Context management tests
+- File system tool tests
+- Tool protocol tests
+- Homebrew integration tests
+
+See `Tests/README.md` for detailed testing documentation.
 
 ---
 
