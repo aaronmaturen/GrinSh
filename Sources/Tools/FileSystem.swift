@@ -208,23 +208,19 @@ class FileSystemTool: Tool {
     private func search(directory: String, pattern: String) -> ToolResult {
         let expandedDir = expandPath(directory)
 
-        do {
-            let enumerator = fileManager.enumerator(atPath: expandedDir)
-            var matches: [String] = []
+        let enumerator = fileManager.enumerator(atPath: expandedDir)
+        var matches: [String] = []
 
-            while let file = enumerator?.nextObject() as? String {
-                if file.localizedCaseInsensitiveContains(pattern) {
-                    matches.append(file)
-                }
+        while let file = enumerator?.nextObject() as? String {
+            if file.localizedCaseInsensitiveContains(pattern) {
+                matches.append(file)
             }
+        }
 
-            if matches.isEmpty {
-                return .success("No matches found")
-            } else {
-                return .success(matches.joined(separator: "\n"))
-            }
-        } catch {
-            return .failure("Error searching: \(error)")
+        if matches.isEmpty {
+            return .success("No matches found")
+        } else {
+            return .success(matches.joined(separator: "\n"))
         }
     }
 }

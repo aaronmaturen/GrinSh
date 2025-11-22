@@ -76,12 +76,11 @@ class AppsTool: Tool {
         let appURL = URL(fileURLWithPath: appPath)
 
         if FileManager.default.fileExists(atPath: appPath) {
-            do {
-                try workspace.launchApplication(at: appURL, options: [], configuration: [:])
-                return .success("Launched \(app)")
-            } catch {
-                return .failure("Error launching app: \(error)")
+            let config = NSWorkspace.OpenConfiguration()
+            workspace.openApplication(at: appURL, configuration: config) { runningApp, error in
+                // Completion handler - we don't wait for it in this synchronous API
             }
+            return .success("Launched \(app)")
         }
 
         // Try using open command

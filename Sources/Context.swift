@@ -33,7 +33,7 @@ public class Context {
         messages.append(message)
 
         do {
-            try database.addMessage(role: "user", content: content)
+            _ = try database.addMessage(role: "user", content: content)
             try database.addHistory(input: content)
             trimIfNeeded()
         } catch {
@@ -46,7 +46,7 @@ public class Context {
         messages.append(message)
 
         do {
-            try database.addMessage(role: "assistant", content: content)
+            _ = try database.addMessage(role: "assistant", content: content)
             trimIfNeeded()
         } catch {
             print("Warning: Could not save message: \(error)")

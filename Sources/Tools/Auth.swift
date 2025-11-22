@@ -3,19 +3,6 @@ import Security
 
 class AuthTool {
     static func requestAuthorization(for operation: String) -> Bool {
-        // Create authorization rights
-        var authItem = AuthorizationItem(
-            name: kAuthorizationRightExecute,
-            valueLength: 0,
-            value: nil,
-            flags: 0
-        )
-
-        var authRights = AuthorizationRights(
-            count: 1,
-            items: &authItem
-        )
-
         // Create authorization reference
         var authRef: AuthorizationRef?
 
@@ -25,21 +12,38 @@ class AuthTool {
             .preAuthorize
         ]
 
-        let status = AuthorizationCreate(
-            &authRights,
-            nil,
-            flags,
-            &authRef
-        )
+        // Use withCString and withUnsafeMutablePointer to properly manage pointers
+        return kAuthorizationRightExecute.withCString { namePtr in
+            var authItem = AuthorizationItem(
+                name: namePtr,
+                valueLength: 0,
+                value: nil,
+                flags: 0
+            )
 
-        if status == errAuthorizationSuccess {
-            if let auth = authRef {
-                AuthorizationFree(auth, [])
+            return withUnsafeMutablePointer(to: &authItem) { itemPtr in
+                var authRights = AuthorizationRights(
+                    count: 1,
+                    items: itemPtr
+                )
+
+                let status = AuthorizationCreate(
+                    &authRights,
+                    nil,
+                    flags,
+                    &authRef
+                )
+
+                if status == errAuthorizationSuccess {
+                    if let auth = authRef {
+                        AuthorizationFree(auth, [])
+                    }
+                    return true
+                }
+
+                return false
             }
-            return true
         }
-
-        return false
     }
 
     static func runWithAuth(command: String) -> (success: Bool, output: String) {
