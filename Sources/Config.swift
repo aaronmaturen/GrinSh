@@ -42,6 +42,10 @@ class Config {
         }
     }
 
+    static func parseTOMLForTesting(_ content: String) throws -> GrinshConfig {
+        return try parseTOML(content)
+    }
+
     private static func parseTOML(_ content: String) throws -> GrinshConfig {
         var config = GrinshConfig.defaultConfig
 

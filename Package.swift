@@ -10,6 +10,10 @@ let package = Package(
         .executable(
             name: "grinsh",
             targets: ["grinsh"]
+        ),
+        .library(
+            name: "GrinshCore",
+            targets: ["GrinshCore"]
         )
     ],
     dependencies: [
@@ -17,13 +21,25 @@ let package = Package(
         .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0")
     ],
     targets: [
-        .executableTarget(
-            name: "grinsh",
+        .target(
+            name: "GrinshCore",
             dependencies: [
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "Yams", package: "Yams")
             ],
-            path: "Sources"
+            path: "Sources",
+            exclude: ["main.swift"]
+        ),
+        .executableTarget(
+            name: "grinsh",
+            dependencies: ["GrinshCore"],
+            path: "Sources",
+            sources: ["main.swift"]
+        ),
+        .testTarget(
+            name: "GrinshCoreTests",
+            dependencies: ["GrinshCore"],
+            path: "Tests"
         )
     ]
 )
