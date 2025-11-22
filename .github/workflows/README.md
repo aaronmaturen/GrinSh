@@ -87,6 +87,22 @@ Provides UI for bumping versions via GitHub Actions:
 
 ---
 
+### 📚 deploy-docs.yml - Deploy Documentation Site
+**Triggers:** Push to main (docs/** changes), Manual workflow dispatch
+
+Deploys the static documentation site to GitHub Pages:
+- Publishes contents of `docs/` directory
+- Serves site at https://aaronmaturen.github.io/GrinSh
+- Automatically updates when docs are modified
+
+**Contents:**
+- index.html - Main documentation site
+- css/style.css - Brand-compliant dark theme
+- js/main.js - Interactive features (copy buttons)
+- images/ - Logo and visual assets
+
+---
+
 ## Workflow Dependencies
 
 ```
@@ -195,13 +211,15 @@ All workflows run on `macos-latest` runners because:
 ├── auto-bump-pr.yml      # Auto-bump PR versions
 ├── auto-release.yml      # Auto-tag on main merge
 ├── bump-version.yml      # Manual version bumping
+├── deploy-docs.yml       # Deploy documentation to GitHub Pages
 ├── release.yml           # Build and publish releases
 ├── test.yml              # CI testing and linting
-└── README.md            # This file
+└── README.md             # This file
 ```
 
 ## Related Documentation
 
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) - Contribution guidelines
-- [docs/RELEASE_PROCESS.md](../../docs/RELEASE_PROCESS.md) - Release process details
+- [documentation/RELEASE_PROCESS.md](../../documentation/RELEASE_PROCESS.md) - Release process details
 - [Makefile](../../Makefile) - Build commands
+- [Documentation Site](https://aaronmaturen.github.io/GrinSh) - User-facing documentation
