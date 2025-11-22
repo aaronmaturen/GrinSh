@@ -1,5 +1,41 @@
 import Foundation
 
+class LoadingSpinner {
+    private var isRunning = false
+    private var spinnerThread: Thread?
+    private let frames = ["◐", "◓", "◑", "◒"]
+    private var currentFrame = 0
+
+    func start() {
+        guard !isRunning else { return }
+        isRunning = true
+        currentFrame = 0
+
+        spinnerThread = Thread { [weak self] in
+            guard let self = self else { return }
+
+            while self.isRunning {
+                print("\r\(self.frames[self.currentFrame]) ", terminator: "")
+                fflush(stdout)
+
+                self.currentFrame = (self.currentFrame + 1) % self.frames.count
+                Thread.sleep(forTimeInterval: 0.1)
+            }
+
+            // Clear the spinner when done
+            print("\r  \r", terminator: "")
+            fflush(stdout)
+        }
+
+        spinnerThread?.start()
+    }
+
+    func stop() {
+        isRunning = false
+        spinnerThread = nil
+    }
+}
+
 struct AgentResponse: Codable {
     let tool: String
     let action: String
@@ -197,8 +233,15 @@ public class Agent {
             semaphore.signal()
         }
 
+        // Start loading spinner
+        let spinner = LoadingSpinner()
+        spinner.start()
+
         task.resume()
         semaphore.wait()
+
+        // Stop loading spinner
+        spinner.stop()
 
         // Handle response
         if let error = responseError {
