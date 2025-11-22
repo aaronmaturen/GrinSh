@@ -1,0 +1,25 @@
+# Swift build artifacts
+.build/
+.swiftpm/
+*.xcodeproj
+*.xcworkspace
+
+# Xcode
+xcuserdata/
+DerivedData/
+
+# macOS
+.DS_Store
+
+# Config files with API keys
+.grinshrc
+
+# Database
+.grinsh/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -1,0 +1,65 @@
+name: Auto Release on Main
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/**'
+      - '!.github/workflows/**'
+
+jobs:
+  check-version:
+    name: Check Version and Create Release
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get version from VERSION file
+      id: get_version
+      run: |
+        if [ -f VERSION ]; then
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          echo "VERSION=v${VERSION}" >> $GITHUB_OUTPUT
+        else
+          # Fallback to commit-based versioning
+          VERSION="v0.1.0-$(git rev-parse --short HEAD)"
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Check if tag exists
+      id: check_tag
+      run: |
+        VERSION=${{ steps.get_version.outputs.VERSION }}
+        if git rev-parse "$VERSION" >/dev/null 2>&1; then
+          echo "TAG_EXISTS=true" >> $GITHUB_OUTPUT
+          echo "Tag $VERSION already exists"
+        else
+          echo "TAG_EXISTS=false" >> $GITHUB_OUTPUT
+          echo "Tag $VERSION does not exist, will create release"
+        fi
+
+    - name: Create and push tag
+      if: steps.check_tag.outputs.TAG_EXISTS == 'false'
+      run: |
+        VERSION=${{ steps.get_version.outputs.VERSION }}
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a "$VERSION" -m "Release $VERSION"
+        git push origin "$VERSION"
+
+    - name: Trigger release workflow
+      if: steps.check_tag.outputs.TAG_EXISTS == 'false'
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        event-type: release-created
+        client-payload: '{"version": "${{ steps.get_version.outputs.VERSION }}"}'

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GrinSh - A conversational shell for macOS that knows more than you do">
+    <title>GrinSh - Conversational Shell for macOS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-gradient"></div>
+
+    <header class="site-header">
+        <div class="container">
+            <div class="logo-area">
+                <div class="terminal-face">
+                    <div class="terminal-bar">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <div class="face">
+                        <div class="eyes">
+                            <span class="eye-left">&gt;</span>
+                            <span class="eye-right">&lt;</span>
+                        </div>
+                        <div class="grin">_</div>
+                    </div>
+                </div>
+                <h1 class="brand-name">GrinSh</h1>
+            </div>
+            <p class="tagline">A conversational shell for macOS</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">Stop memorizing commands.<br>Start talking.</h2>
+                    <p class="hero-description">
+                        No flags, no man pages, no syntax to remember.
+                        Just say what you want, and grinsh does it.
+                    </p>
+                    <div class="terminal-demo">
+                        <div class="terminal-header">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="terminal-title">grinsh</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="prompt-line">
+                                <span class="prompt">&gt;</span>
+                                <span class="command">what's using port 8080</span>
+                            </div>
+                            <div class="prompt-line">
+                                <span class="prompt">&gt;</span>
+                                <span class="command">compress the projects folder</span>
+                            </div>
+                            <div class="prompt-line">
+                                <span class="prompt">&gt;</span>
+                                <span class="command">find that pdf I downloaded last week</span>
+                            </div>
+                            <div class="prompt-line">
+                                <span class="prompt">&gt;</span>
+                                <span class="command">quit slack</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cta-buttons">
+                        <a href="#install" class="btn btn-primary">Quick Install</a>
+                        <a href="https://github.com/aaronmaturen/GrinSh" class="btn btn-secondary">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Natural Language</h3>
+                        <p>Just say what you want in plain English. No syntax to remember.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🍎</div>
+                        <h3>Native macOS</h3>
+                        <p>Built with Swift, using native macOS APIs for files, apps, and system operations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3>Auto-installing Tools</h3>
+                        <p>Discovers and installs CLI tools via Homebrew on demand.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3>Conversation Memory</h3>
+                        <p>Remembers context across your session for smarter interactions.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Touch ID Support</h3>
+                        <p>Privileged operations use native macOS authentication.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Escape Hatch</h3>
+                        <p>Run raw commands with <code>!command</code> when you need it.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="install" class="install">
+            <div class="container">
+                <h2 class="section-title">Installation</h2>
+                <div class="install-content">
+                    <div class="install-method">
+                        <h3>Quick Install (Recommended)</h3>
+                        <div class="code-block">
+                            <pre><code>curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash</code></pre>
+                            <button class="copy-btn" data-copy="curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash">Copy</button>
+                        </div>
+                        <p class="install-note">This will download the latest release, verify checksums, and install to <code>/usr/local/bin</code></p>
+                    </div>
+
+                    <div class="install-method">
+                        <h3>Prerequisites</h3>
+                        <ul class="checklist">
+                            <li>macOS 13.0 or later</li>
+                            <li>Claude API key from <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
+                            <li>Homebrew (recommended, for CLI tool installation)</li>
+                        </ul>
+                    </div>
+
+                    <div class="install-method">
+                        <h3>Next Steps</h3>
+                        <ol class="steps-list">
+                            <li>Add your Claude API key to <code>~/.grinshrc</code></li>
+                            <li>Run <code>grinsh</code> to start</li>
+                            <li>(Optional) Set as default shell with <code>chsh -s /usr/local/bin/grinsh</code></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <div class="workflow">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <h3>You speak</h3>
+                        <p>Type your request in natural language</p>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <h3>Claude interprets</h3>
+                        <p>AI understands your intent and finds the right tool</p>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <h3>GrinSh executes</h3>
+                        <p>Native APIs or CLI tools get the job done</p>
+                    </div>
+                </div>
+                <div class="architecture-note">
+                    <p>Built-in tools use native Swift APIs. Unknown tools are discovered via Homebrew, learned from documentation, and cached for future use.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="docs" class="documentation">
+            <div class="container">
+                <h2 class="section-title">Documentation</h2>
+                <div class="docs-grid">
+                    <a href="https://github.com/aaronmaturen/GrinSh/blob/main/README.md" class="doc-card">
+                        <h3>📖 README</h3>
+                        <p>Complete overview and getting started guide</p>
+                    </a>
+                    <a href="https://github.com/aaronmaturen/GrinSh/blob/main/CONTRIBUTING.md" class="doc-card">
+                        <h3>🤝 Contributing</h3>
+                        <p>Development setup and contribution guidelines</p>
+                    </a>
+                    <a href="https://github.com/aaronmaturen/GrinSh/blob/main/documentation/RELEASE_PROCESS.md" class="doc-card">
+                        <h3>🚀 Release Process</h3>
+                        <p>How to create and publish new releases</p>
+                    </a>
+                    <a href="https://github.com/aaronmaturen/GrinSh/releases" class="doc-card">
+                        <h3>📦 Releases</h3>
+                        <p>Download pre-built binaries</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="terminal-face-small">
+                            <span class="eye">&gt;</span>
+                            <span class="grin">_</span>
+                            <span class="eye">&lt;</span>
+                        </div>
+                        <span class="brand-name-small">GrinSh</span>
+                    </div>
+                    <p class="footer-tagline">A conversational shell that knows more than you do.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/aaronmaturen/GrinSh">GitHub</a></li>
+                        <li><a href="https://github.com/aaronmaturen/GrinSh/issues">Issues</a></li>
+                        <li><a href="https://github.com/aaronmaturen/GrinSh/releases">Releases</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://console.anthropic.com">Get API Key</a></li>
+                        <li><a href="https://brew.sh">Install Homebrew</a></li>
+                        <li><a href="https://github.com/aaronmaturen/GrinSh/blob/main/LICENSE">License (MIT)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GrinSh Contributors. Released under the MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
