@@ -190,44 +190,64 @@ We use [Semantic Versioning](https://semver.org/):
 
 ### Creating a Release
 
-#### Option 1: Automatic Release (Recommended)
+#### Option 1: Using the Bump Version Script (Recommended)
 
-1. Update the VERSION file:
+The easiest way to create a release:
+
+```bash
+# Bump minor version (default) - e.g., 1.0.0 → 1.1.0
+./scripts/bump-version.sh
+
+# Bump major version - e.g., 1.0.0 → 2.0.0
+./scripts/bump-version.sh major
+
+# Bump patch version - e.g., 1.0.0 → 1.0.1
+./scripts/bump-version.sh patch
+
+# Set specific version
+./scripts/bump-version.sh 2.5.0
+```
+
+The script will:
+- Update the VERSION file
+- Update CHANGELOG.md (if [Unreleased] section exists)
+- Create a git commit
+- Optionally create and push a git tag
+- Trigger the release workflow automatically
+
+#### Option 2: Using GitHub Actions UI
+
+1. Go to **Actions** → **Bump Version**
+2. Click **Run workflow**
+3. Select bump type (major/minor/patch)
+4. Click **Run workflow**
+
+This will automatically:
+- Update VERSION file
+- Update CHANGELOG.md
+- Create commit and tag
+- Push to repository
+- Trigger release build
+
+#### Option 3: Manual Release
+
+1. Update VERSION file manually:
    ```bash
    echo "1.2.0" > VERSION
-   git add VERSION
+   ```
+
+2. Update CHANGELOG.md (optional but recommended)
+
+3. Commit and tag:
+   ```bash
+   git add VERSION CHANGELOG.md
    git commit -m "Bump version to 1.2.0"
-   ```
-
-2. Merge to main:
-   ```bash
-   git checkout main
-   git merge your-branch
-   git push origin main
-   ```
-
-3. The CI will automatically:
-   - Create a git tag (v1.2.0)
-   - Build the release binary
-   - Create a GitHub release
-   - Attach binaries and checksums
-
-#### Option 2: Manual Release
-
-1. Create and push a tag:
-   ```bash
    git tag -a v1.2.0 -m "Release version 1.2.0"
+   git push origin main
    git push origin v1.2.0
    ```
 
-2. The release workflow will automatically build and publish
-
-#### Option 3: Manual Workflow Dispatch
-
-1. Go to Actions → Release
-2. Click "Run workflow"
-3. Enter the version (e.g., v1.2.0)
-4. Click "Run workflow"
+4. The release workflow will automatically build and publish
 
 ### Release Checklist
 
