@@ -13,6 +13,8 @@ class FileSystemTool: Tool {
         }
 
         switch command {
+        case "pwd":
+            return pwd()
         case "list":
             return list(path: parts.count > 1 ? parts[1] : ".")
         case "read":
@@ -55,6 +57,11 @@ class FileSystemTool: Tool {
             return NSString(string: path).expandingTildeInPath
         }
         return path
+    }
+
+    private func pwd() -> ToolResult {
+        let currentPath = fileManager.currentDirectoryPath
+        return .success(currentPath)
     }
 
     private func list(path: String) -> ToolResult {

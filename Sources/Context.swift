@@ -148,6 +148,27 @@ public class Context {
             "explanation": "Quitting Slack application"
         }
 
+        User: "where are we" or "what directory am I in"
+        {
+            "tool": "files",
+            "action": "pwd",
+            "explanation": "Getting current working directory"
+        }
+
+        User: "list files here"
+        {
+            "tool": "files",
+            "action": "list:.",
+            "explanation": "Listing files in current directory"
+        }
+
+        User: "copy report.pdf to desktop"
+        {
+            "tool": "files",
+            "action": "copy:report.pdf:~/Desktop/report.pdf",
+            "explanation": "Copying report.pdf to Desktop"
+        }
+
         Be concise, practical, and prefer simple solutions. If multiple approaches exist, choose the most straightforward one.
         """
     }
