@@ -37,24 +37,55 @@ You open a terminal. Instead of a prompt, there's a conversation. You say what y
 
 ## Installation
 
+### Quick Install (Recommended)
+
+```bash
+curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash
+```
+
+This will:
+- Download the latest release
+- Verify the checksum
+- Install to `/usr/local/bin`
+- Create example config at `~/.grinshrc`
+
+Then add your Claude API key to `~/.grinshrc` and you're ready to go!
+
+**Installation options:**
+```bash
+# Install and automatically add to /etc/shells
+curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash -s -- --add-shell
+
+# Skip config file creation
+curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash -s -- --no-config
+
+# See all options
+curl -sSL https://raw.githubusercontent.com/aaronmaturen/GrinSh/main/install.sh | bash -s -- --help
+```
+
 ### Prerequisites
 
 - macOS 13.0 or later
 - Claude API key from [console.anthropic.com](https://console.anthropic.com)
 - Homebrew (recommended, for CLI tool installation)
 
-### Download Pre-built Binary (Recommended)
+### Manual Installation
+
+<details>
+<summary>Click to expand manual installation instructions</summary>
+
+#### Download Pre-built Binary
 
 ```bash
 # Download latest release
 curl -L https://github.com/aaronmaturen/GrinSh/releases/latest/download/grinsh-v1.0.0-macos.tar.gz | tar xz
 
+# Verify the download
+shasum -a 256 -c grinsh-v1.0.0-macos.tar.gz.sha256
+
 # Install binary
 sudo cp grinsh /usr/local/bin/grinsh
 sudo chmod +x /usr/local/bin/grinsh
-
-# Add to valid shells
-echo "/usr/local/bin/grinsh" | sudo tee -a /etc/shells
 
 # Setup config
 cp .grinshrc.example ~/.grinshrc
@@ -63,12 +94,7 @@ cp .grinshrc.example ~/.grinshrc
 nano ~/.grinshrc
 ```
 
-**Verify the download:**
-```bash
-shasum -a 256 -c grinsh-v1.0.0-macos.tar.gz.sha256
-```
-
-### Build from Source
+#### Build from Source
 
 Requires Swift 5.9 or later:
 
@@ -90,7 +116,9 @@ cp .grinshrc.example ~/.grinshrc
 nano ~/.grinshrc
 ```
 
-### Set as default shell (optional)
+</details>
+
+### Set as Default Shell (Optional)
 
 ```bash
 # Add to valid shells
