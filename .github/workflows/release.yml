@@ -18,6 +18,8 @@ jobs:
   build-and-release:
     name: Build and Release
     runs-on: macos-latest
+    env:
+      TOOLCHAINS: ''
 
     steps:
     - name: Checkout code
