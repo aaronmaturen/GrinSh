@@ -97,6 +97,8 @@ Then create a Pull Request on GitHub with:
 - Reference to related issues
 - Test results if relevant
 
+**Note:** When creating a PR to `main`, if your VERSION file matches the latest release, the CI will automatically bump it to the next minor version and commit to your PR. You can manually adjust the version type if needed before merging.
+
 ---
 
 ## Code Style
