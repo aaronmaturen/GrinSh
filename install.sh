@@ -168,22 +168,23 @@ get_latest_version() {
 download_release() {
     print_info "Downloading grinsh $VERSION..."
 
-    local download_url="https://github.com/$REPO/releases/download/$VERSION/grinsh-$VERSION-macos.tar.gz"
-    local checksum_url="https://github.com/$REPO/releases/download/$VERSION/grinsh-$VERSION-macos.tar.gz.sha256"
+    local filename="grinsh-$VERSION-macos.tar.gz"
+    local download_url="https://github.com/$REPO/releases/download/$VERSION/$filename"
+    local checksum_url="https://github.com/$REPO/releases/download/$VERSION/$filename.sha256"
 
     cd "$TEMP_DIR"
 
-    if ! curl -sSL -f "$download_url" -o "grinsh.tar.gz"; then
+    if ! curl -sSL -f "$download_url" -o "$filename"; then
         print_error "Failed to download release"
         print_info "URL: $download_url"
         exit 1
     fi
 
-    print_success "Downloaded grinsh-$VERSION-macos.tar.gz"
+    print_success "Downloaded $filename"
 
     # Download checksum
     if [ "$SKIP_CHECKSUM" = false ]; then
-        if curl -sSL -f "$checksum_url" -o "grinsh.tar.gz.sha256"; then
+        if curl -sSL -f "$checksum_url" -o "$filename.sha256"; then
             print_success "Downloaded checksum file"
         else
             print_warning "Could not download checksum file (continuing anyway)"
@@ -198,7 +199,9 @@ verify_checksum() {
         return
     fi
 
-    if [ ! -f "$TEMP_DIR/grinsh.tar.gz.sha256" ]; then
+    local filename="grinsh-$VERSION-macos.tar.gz"
+
+    if [ ! -f "$TEMP_DIR/$filename.sha256" ]; then
         print_warning "No checksum file found, skipping verification"
         return
     fi
@@ -206,7 +209,7 @@ verify_checksum() {
     print_info "Verifying checksum..."
 
     cd "$TEMP_DIR"
-    if shasum -a 256 -c grinsh.tar.gz.sha256 2>/dev/null; then
+    if shasum -a 256 -c "$filename.sha256" 2>/dev/null; then
         print_success "Checksum verified"
     else
         print_error "Checksum verification failed!"
@@ -223,8 +226,10 @@ verify_checksum() {
 extract_archive() {
     print_info "Extracting archive..."
 
+    local filename="grinsh-$VERSION-macos.tar.gz"
+
     cd "$TEMP_DIR"
-    if tar -xzf grinsh.tar.gz; then
+    if tar -xzf "$filename"; then
         print_success "Archive extracted"
     else
         print_error "Failed to extract archive"

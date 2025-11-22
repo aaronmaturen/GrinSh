@@ -76,10 +76,10 @@ jobs:
         # Create tarball
         cd dist
         tar -czf grinsh-${VERSION}-macos.tar.gz grinsh .grinshrc.example README.txt
-        cd ..
 
-        # Create checksum
-        shasum -a 256 dist/grinsh-${VERSION}-macos.tar.gz > dist/grinsh-${VERSION}-macos.tar.gz.sha256
+        # Create checksum (must be in dist/ so path doesn't include dist/)
+        shasum -a 256 grinsh-${VERSION}-macos.tar.gz > grinsh-${VERSION}-macos.tar.gz.sha256
+        cd ..
 
     - name: Create Release Notes
       id: release_notes
