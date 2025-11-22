@@ -1,0 +1,169 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build and Release
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: "5.9"
+
+    - name: Get version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+        else
+          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build release binary
+      run: |
+        swift build -c release --arch arm64 --arch x86_64
+
+    - name: Package binary
+      run: |
+        VERSION=${{ steps.version.outputs.VERSION }}
+        mkdir -p dist
+
+        # Copy binary
+        cp .build/apple/Products/Release/grinsh dist/
+
+        # Copy example config
+        cp .grinshrc.example dist/
+
+        # Create README for the release
+        cat > dist/README.txt <<EOF
+        grinsh - Conversational Shell for macOS
+        Version: ${VERSION}
+
+        Installation:
+        1. Copy grinsh to /usr/local/bin:
+           sudo cp grinsh /usr/local/bin/grinsh
+           sudo chmod +x /usr/local/bin/grinsh
+
+        2. Add to valid shells:
+           echo "/usr/local/bin/grinsh" | sudo tee -a /etc/shells
+
+        3. Copy example config to your home directory:
+           cp .grinshrc.example ~/.grinshrc
+
+        4. Edit ~/.grinshrc and add your Claude API key
+
+        5. (Optional) Set as default shell:
+           chsh -s /usr/local/bin/grinsh
+
+        For more information, visit: https://github.com/${{ github.repository }}
+        EOF
+
+        # Create tarball
+        cd dist
+        tar -czf grinsh-${VERSION}-macos.tar.gz grinsh .grinshrc.example README.txt
+        cd ..
+
+        # Create checksum
+        shasum -a 256 dist/grinsh-${VERSION}-macos.tar.gz > dist/grinsh-${VERSION}-macos.tar.gz.sha256
+
+    - name: Create Release Notes
+      id: release_notes
+      run: |
+        VERSION=${{ steps.version.outputs.VERSION }}
+        cat > release_notes.md <<EOF
+        # grinsh ${VERSION}
+
+        A conversational shell for macOS that uses natural language to execute commands.
+
+        ## ✨ What's New
+
+        This release includes:
+        - Natural language command interface powered by Claude
+        - Built-in macOS tools (files, apps, system operations)
+        - Auto-discovery and installation of CLI tools via Homebrew
+        - Conversation history with configurable context
+        - Touch ID authentication for privileged operations
+
+        ## 📦 Installation
+
+        ### Quick Install
+
+        \`\`\`bash
+        # Download and extract
+        curl -L https://github.com/${{ github.repository }}/releases/download/${VERSION}/grinsh-${VERSION}-macos.tar.gz | tar xz
+
+        # Install
+        sudo cp grinsh /usr/local/bin/grinsh
+        sudo chmod +x /usr/local/bin/grinsh
+
+        # Setup config
+        cp .grinshrc.example ~/.grinshrc
+
+        # Add your Claude API key to ~/.grinshrc
+        \`\`\`
+
+        ### Requirements
+
+        - macOS 13.0 or later
+        - Claude API key from [console.anthropic.com](https://console.anthropic.com)
+        - Homebrew (recommended, for CLI tool installation)
+
+        ## 🔐 Verification
+
+        Verify the download:
+        \`\`\`bash
+        shasum -a 256 -c grinsh-${VERSION}-macos.tar.gz.sha256
+        \`\`\`
+
+        ## 📚 Documentation
+
+        Full documentation: https://github.com/${{ github.repository }}
+
+        ## 🐛 Known Issues
+
+        Please report issues at: https://github.com/${{ github.repository }}/issues
+        EOF
+
+        echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+        cat release_notes.md >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.VERSION }}
+        name: grinsh ${{ steps.version.outputs.VERSION }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+        files: |
+          dist/grinsh-${{ steps.version.outputs.VERSION }}-macos.tar.gz
+          dist/grinsh-${{ steps.version.outputs.VERSION }}-macos.tar.gz.sha256
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: grinsh-${{ steps.version.outputs.VERSION }}-macos
+        path: |
+          dist/grinsh-${{ steps.version.outputs.VERSION }}-macos.tar.gz
+          dist/grinsh-${{ steps.version.outputs.VERSION }}-macos.tar.gz.sha256
+        retention-days: 90
