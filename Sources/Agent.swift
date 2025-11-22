@@ -35,8 +35,8 @@ class LoadingSpinner {
                 Thread.sleep(forTimeInterval: 0.1)
             }
 
-            // Clear the spinner when done
-            print("\r  \r", terminator: "")
+            // Clear the spinner when done - use ANSI clear line sequence
+            print("\r\u{001B}[K", terminator: "")
             fflush(stdout)
         }
 
@@ -173,7 +173,7 @@ public class Agent {
         }
 
         // Show what we're doing
-        print("\n\(Color.dim)\(agentResponse.explanation)\(Color.reset)")
+        print("\(Color.dim)\(agentResponse.explanation)\(Color.reset)")
 
         // Check if we need to install via brew
         if let brewPackage = agentResponse.installViaBrew {
@@ -274,6 +274,9 @@ public class Agent {
         // Stop loading spinner
         spinner.stop()
         currentSpinner = nil
+
+        // Give spinner thread a moment to finish cleanup
+        Thread.sleep(forTimeInterval: 0.05)
 
         // Handle response
         if let error = responseError {
