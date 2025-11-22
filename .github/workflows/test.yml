@@ -15,11 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Swift
-      uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: "5.9"
-
     - name: Cache Swift dependencies
       uses: actions/cache@v4
       with:
@@ -65,11 +60,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Setup Swift
-      uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: "5.9"
 
     - name: Build release
       run: swift build -c release -v
