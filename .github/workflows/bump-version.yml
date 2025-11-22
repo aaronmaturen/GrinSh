@@ -1,0 +1,132 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - minor
+          - major
+          - patch
+        default: 'minor'
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    name: Bump Version
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Read current version
+      id: current_version
+      run: |
+        CURRENT_VERSION=$(cat VERSION | tr -d '[:space:]')
+        echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
+        echo "Current version: ${CURRENT_VERSION}"
+
+    - name: Calculate new version
+      id: new_version
+      run: |
+        CURRENT_VERSION="${{ steps.current_version.outputs.CURRENT_VERSION }}"
+        IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+        MAJOR="${VERSION_PARTS[0]}"
+        MINOR="${VERSION_PARTS[1]}"
+        PATCH="${VERSION_PARTS[2]}"
+
+        BUMP_TYPE="${{ github.event.inputs.bump_type }}"
+
+        case "$BUMP_TYPE" in
+          major)
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            ;;
+          minor)
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            ;;
+          patch)
+            PATCH=$((PATCH + 1))
+            ;;
+        esac
+
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+        echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_OUTPUT
+        echo "New version: ${NEW_VERSION}"
+
+    - name: Check if tag exists
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        if git rev-parse "v${NEW_VERSION}" >/dev/null 2>&1; then
+          echo "Error: Tag v${NEW_VERSION} already exists"
+          exit 1
+        fi
+
+    - name: Update VERSION file
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        echo "$NEW_VERSION" > VERSION
+        echo "Updated VERSION to $NEW_VERSION"
+
+    - name: Update CHANGELOG
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        CURRENT_DATE=$(date +%Y-%m-%d)
+
+        if [ -f "CHANGELOG.md" ] && grep -q "\[Unreleased\]" CHANGELOG.md; then
+          # macOS sed syntax
+          sed -i '' "s/## \[Unreleased\]/## [Unreleased]\n\n## [$NEW_VERSION] - $CURRENT_DATE/" CHANGELOG.md
+          echo "Updated CHANGELOG.md"
+        else
+          echo "No [Unreleased] section found in CHANGELOG.md, skipping"
+        fi
+
+    - name: Commit changes
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        git add VERSION CHANGELOG.md
+        git commit -m "Bump version to $NEW_VERSION"
+
+    - name: Create tag
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        git tag -a "v$NEW_VERSION" -m "Release version $NEW_VERSION"
+
+    - name: Push changes
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        git push origin ${{ github.ref_name }}
+        git push origin "v$NEW_VERSION"
+
+    - name: Create release summary
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.NEW_VERSION }}"
+        CURRENT_VERSION="${{ steps.current_version.outputs.CURRENT_VERSION }}"
+        BUMP_TYPE="${{ github.event.inputs.bump_type }}"
+
+        echo "# Version Bump Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Successfully bumped version!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Previous version:** $CURRENT_VERSION" >> $GITHUB_STEP_SUMMARY
+        echo "- **New version:** $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+        echo "- **Bump type:** $BUMP_TYPE" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📦 The release workflow will automatically build and publish the release." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🔗 [View Release](https://github.com/${{ github.repository }}/releases/tag/v$NEW_VERSION) (once built)" >> $GITHUB_STEP_SUMMARY
